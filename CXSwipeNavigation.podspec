@@ -18,5 +18,5 @@ Pod::Spec.new do |s|
   s.requires_arc            = true
 
   s.dependency 'CXSwipeGestureRecognizer'
-  s.dependency 'UIScrollView-Actions'
+  s.dependency 'UIScrollView-Actions', '0.0.2'
 end

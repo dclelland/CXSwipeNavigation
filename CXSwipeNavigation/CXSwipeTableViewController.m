@@ -25,6 +25,12 @@
     self.tableView.alwaysBounceVertical = YES;
 }
 
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    self.tableView.bounces = YES;
+}
+
 #pragma mark - Getters
 
 - (CXSwipeNavigationController *)swipeNavigationController

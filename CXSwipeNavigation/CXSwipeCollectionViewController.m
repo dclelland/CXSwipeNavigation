@@ -19,6 +19,12 @@
     self.collectionView.alwaysBounceVertical = YES;
 }
 
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    self.collectionView.bounces = YES;
+}
+
 #pragma mark - Getters
 
 - (CXSwipeNavigationController *)swipeNavigationController

@@ -1,7 +1,7 @@
 CXSwipeNavigation
 =================
 
-CXSwipeNavigation is a series of classes that allows you to swipe vertically between `UITableView` and `UICollectionView`.
+CXSwipeNavigation is a series of classes that allows you to swipe vertically between `UITableView` and `UICollectionView`. Uses the interactive transitions API for reversability.
 
 #### 1. Build your UITableViewController and UICollectionViewControllers as subclasses of CXSwipeTableViewController and CXSwipeCollectionViewController, respectively.
 

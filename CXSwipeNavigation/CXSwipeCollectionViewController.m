@@ -11,6 +11,12 @@
 #import "CXSwipeCollectionViewController.h"
 #import "CXSwipeNavigationController.h"
 
+@interface CXSwipeCollectionViewController ()
+
+- (CXSwipeNavigationController *)swipeNavigationController;
+
+@end
+
 @implementation CXSwipeCollectionViewController
 
 - (void)viewDidLoad

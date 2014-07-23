@@ -81,25 +81,25 @@
         default: break;
     }
     
-    /* Turn bounce scrolling off */
-    fromViewController.scrollView.bounces = NO;
-    toViewController.scrollView.bounces = NO;
-    
     /* Animate the transition */
     [UIView animateWithDuration:[self transitionDuration:transitionContext] delay:0.0 options:UIViewAnimationOptionCurveLinear animations:^(void){
         
         /* Apply the transition */
         container.transform = animationTransform;
         
-    } completion:^(BOOL finished){
+        /* Disable scrolling */
+        fromViewController.scrollView.scrollEnabled = NO;
+        toViewController.scrollView.scrollEnabled = NO;
         
-        /* Turn bounce scrolling back on again */
-        fromViewController.scrollView.bounces = YES;
-        toViewController.scrollView.bounces = YES;
+    } completion:^(BOOL finished){
         
         /* Finish the transitions */
         container.transform = CGAffineTransformIdentity;
         toViewController.view.frame = sourceRect;
+        
+        /* Reenable scrolling */
+        fromViewController.scrollView.scrollEnabled = YES;
+        toViewController.scrollView.scrollEnabled = YES;
         
         /* Tidy everything up according to whether the transition completed or not */
         if ([transitionContext transitionWasCancelled]) {

@@ -6,6 +6,8 @@
 //  Copyright (c) 2014 Daniel Clelland. All rights reserved.
 //
 
+#import <CXSwipeGestureRecognizer/CXSwipeGestureRecognizer.h>
+
 #import "CXSwipeTransition.h"
 #import "CXSwipeInteractiveTransition.h"
 
@@ -19,6 +21,8 @@
 @end
 
 @interface CXSwipeNavigationController : UINavigationController
+
+@property (nonatomic, retain) CXSwipeGestureRecognizer *swipeGestureRecognizer;
 
 @property (nonatomic, retain) CXSwipeTransition *swipeTransition;
 @property (nonatomic, retain) CXSwipeInteractiveTransition *swipeInteractiveTransition;

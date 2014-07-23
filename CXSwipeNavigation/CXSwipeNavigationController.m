@@ -16,7 +16,7 @@
 #import "CXSwipeTransition.h"
 #import "CXSwipeInteractiveTransition.h"
 
-@interface CXSwipeNavigationController () <UINavigationControllerDelegate, UIViewControllerTransitioningDelegate>
+@interface CXSwipeNavigationController () <UINavigationControllerDelegate, CXSwipeGestureRecognizerDelegate>
 
 @property (nonatomic) CGFloat transitioningOffset;
 
@@ -45,6 +45,10 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    self.swipeGestureRecognizer = [[CXSwipeGestureRecognizer alloc] initWithTarget:self action:@selector(onSwipe:)];
+    self.swipeGestureRecognizer.delegate = self;
+    
     self.swipeTransition = [[CXSwipeTransition alloc] init];
     self.swipeInteractiveTransition = [[CXSwipeInteractiveTransition alloc] init];
 }
@@ -71,26 +75,24 @@
 
 #pragma mark - Actions
 
-- (void)onPan:(UIPanGestureRecognizer *)gestureRecognizer
+- (void)onSwipe:(CXSwipeGestureRecognizer *)gestureRecognizer
 {
     /* If the interactive transition is not running */
     if (!self.swipeInteractiveTransition.transitioning) {
         
         /* Get the relevant data */
-        CGPoint translation = [gestureRecognizer translationInView:self.view];
-        CGPoint velocity = [gestureRecognizer velocityInView:self.view];
         UIScrollView *view = (UIScrollView *)gestureRecognizer.view;
         
         /* If scrolling downwards on a scrollview that is scrolled to the bottom, and can push, push a view controller */
-        if (velocity.y < 0.0f && view.isScrolledToBottom && self.canPush) {
+        if (gestureRecognizer.currentDirection == CXSwipeGestureDirectionUpwards && view.isScrolledToBottom && self.canPush) {
             [self pushViewController:[self.dataSource swipeNavigationController:self viewControllerAtIndex:self.viewControllers.count] animated:YES];
-            self.transitioningOffset = -translation.y;
+            self.transitioningOffset = [gestureRecognizer translationInDirection:CXSwipeGestureDirectionUpwards];
         }
         
         /* If scrolling upwards on a scrollview that is scrolled to the top, and can pop, pop a view controller */
-        if (velocity.y > 0.0f && view.isScrolledToTop && self.canPop) {
+        if (gestureRecognizer.currentDirection == CXSwipeGestureDirectionDownwards > 0.0f && view.isScrolledToTop && self.canPop) {
             [self popViewControllerAnimated:YES];
-            self.transitioningOffset = translation.y;
+            self.transitioningOffset = [gestureRecognizer translationInDirection:CXSwipeGestureDirectionDownwards];
         }
     
     }
@@ -134,7 +136,7 @@
 
 - (void)navigationController:(UINavigationController *)navigationController didShowViewController:(UIViewController *)viewController animated:(BOOL)animated
 {
-    [viewController.scrollView.panGestureRecognizer addTarget:self action:@selector(onPan:)];
+    [viewController.scrollView addGestureRecognizer:self.swipeGestureRecognizer];
 }
 
 - (id<UIViewControllerAnimatedTransitioning>)navigationController:(UINavigationController *)navigationController animationControllerForOperation:(UINavigationControllerOperation)operation fromViewController:(UIViewController *)fromVC toViewController:(UIViewController *)toVC
@@ -146,6 +148,13 @@
 - (id<UIViewControllerInteractiveTransitioning>)navigationController:(UINavigationController *)navigationController interactionControllerForAnimationController:(id<UIViewControllerAnimatedTransitioning>)animationController
 {
     return self.swipeInteractiveTransition;
+}
+
+#pragma mark - Gesture recognizer delegate
+
+- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer
+{
+    return gestureRecognizer == self.swipeGestureRecognizer && otherGestureRecognizer == self.topViewController.scrollView.panGestureRecognizer;
 }
 
 @end

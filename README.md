@@ -1,13 +1,11 @@
 CXSwipeNavigation
 =================
 
-CXSwipeNavigation is a series of classes that allows you to swipe vertically between `UITableView` and `UICollectionView`s.
+CXSwipeNavigation is a series of classes that allows you to swipe vertically between `UITableView` and `UICollectionView`.
 
-Setup is simple:
+#### 1. Build your UITableViewController and UICollectionViewControllers as subclasses of CXSwipeTableViewController and CXSwipeCollectionViewController, respectively.
 
-### 1. Build your `UITableViewController` and `UICollectionViewController`s as subclasses of `CXSwipeTableViewController` and `CXSwipeCollectionViewController`, respectively.
-
-`MYTableViewController.h`
+*MYTableViewController.h*
 
     @interface MYTableViewController : CXSwipeTableViewController
 
@@ -15,7 +13,7 @@ Setup is simple:
 
     @end
 
-`MYCollectionViewController.h`
+*MYCollectionViewController.h*
 
     @interface MYCollectionViewController : CXSwipeCollectionViewController
 
@@ -23,9 +21,9 @@ Setup is simple:
 
     @end
 
-### 2. Use `CXSwipeNavigationController` as your main navigation controller and set the data source.
+#### 2. Use CXSwipeNavigationController as your main navigation controller and set the data source.
 
-`MYAppDelegate.m`
+*MYAppDelegate.m*
 
     - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
     {
@@ -39,10 +37,9 @@ Setup is simple:
         //...
     }
 
+#### 3. Implement the methods in CXSwipeNavigationControllerDataSource.
 
-### 3. Implement the methods in `CXSwipeNavigationControllerDataSource`.
-
-`MYAppDelegate.m`
+*MYAppDelegate.m*
 
     - (NSUInteger)numberOfViewControllersForSwipeNavigationController:(CXSwipeNavigationController *)navigationController
     {

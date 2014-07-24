@@ -154,6 +154,7 @@
 
 - (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer
 {
+    NSLog(@"swipe nav");
     return gestureRecognizer == self.swipeGestureRecognizer && otherGestureRecognizer == self.topViewController.scrollView.panGestureRecognizer;
 }
 

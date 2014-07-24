@@ -6,8 +6,10 @@
 //  Copyright (c) 2014 Daniel Clelland. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
+#import "CXSwipeNavigationController.h"
 
 @interface CXSwipeCollectionViewController : UICollectionViewController
+
+- (CXSwipeNavigationController *)swipeNavigationController;
 
 @end

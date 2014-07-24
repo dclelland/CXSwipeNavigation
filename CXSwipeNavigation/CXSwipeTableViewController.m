@@ -9,13 +9,6 @@
 #import <UIScrollView-Actions/UIScrollView+Actions.h>
 
 #import "CXSwipeTableViewController.h"
-#import "CXSwipeNavigationController.h"
-
-@interface CXSwipeTableViewController ()
-
-- (CXSwipeNavigationController *)swipeNavigationController;
-
-@end
 
 @implementation CXSwipeTableViewController
 

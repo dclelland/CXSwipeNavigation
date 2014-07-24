@@ -53,4 +53,5 @@ CXSwipeNavigation is a series of classes that allows you to swipe vertically bet
 
 ### Todo:
 
-- Reimplement CXSwipeNavigationController in a way that makes better sue of CXSwipeGestureRecognizer's new features
+- Reimplement CXSwipeNavigationController in a way that makes better use of CXSwipeGestureRecognizer's new features
+- Add example project

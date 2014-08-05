@@ -16,19 +16,19 @@
 {
     self = [super init];
     if (self) {
-        self.operation = UINavigationControllerOperationNone;
-        self.duration = 0.333;
-        self.gutter = 0.0f;
+        _operation = UINavigationControllerOperationNone;
+        _duration = 0.333;
+        _gutter = 0.0f;
     }
     return self;
 }
 
-- (NSTimeInterval)transitionDuration:(id<UIViewControllerContextTransitioning>)transitionContext
+- (NSTimeInterval)transitionDuration:(id <UIViewControllerContextTransitioning>)transitionContext
 {
     return self.duration;
 }
 
-- (void)animateTransition:(id<UIViewControllerContextTransitioning>)transitionContext
+- (void)animateTransition:(id <UIViewControllerContextTransitioning>)transitionContext
 {
     NSAssert(self.operation != UINavigationControllerOperationNone, @"CXSwipeTransition should have a valid operation set");
     

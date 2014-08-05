@@ -22,12 +22,12 @@
 
 @interface CXSwipeNavigationController : UINavigationController
 
-@property (nonatomic, retain) CXSwipeGestureRecognizer *swipeGestureRecognizer;
+@property (nonatomic, strong) CXSwipeGestureRecognizer *swipeGestureRecognizer;
 
-@property (nonatomic, retain) CXSwipeTransition *swipeTransition;
-@property (nonatomic, retain) CXSwipeInteractiveTransition *swipeInteractiveTransition;
+@property (nonatomic, strong) CXSwipeTransition *swipeTransition;
+@property (nonatomic, strong) CXSwipeInteractiveTransition *swipeInteractiveTransition;
 
-@property (unsafe_unretained) id <CXSwipeNavigationControllerDataSource> dataSource;
+@property (nonatomic, weak) id <CXSwipeNavigationControllerDataSource> dataSource;
 
 - (BOOL)canPush;
 - (BOOL)canPop;

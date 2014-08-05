@@ -36,8 +36,8 @@
 {
     self = [super initWithRootViewController:rootViewController];
     if (self) {
-        self.navigationBarHidden = YES;
-        self.delegate = self;
+        _navigationBarHidden = YES;
+        _delegate = self;
     }
     return self;
 }

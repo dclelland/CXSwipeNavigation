@@ -32,19 +32,12 @@
 
 @implementation CXSwipeNavigationController
 
-- (instancetype)initWithRootViewController:(UIViewController *)rootViewController
-{
-    self = [super initWithRootViewController:rootViewController];
-    if (self) {
-        _navigationBarHidden = YES;
-        _delegate = self;
-    }
-    return self;
-}
-
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+
+    self.navigationBarHidden = YES;
+    self.delegate = self;
     
     self.swipeGestureRecognizer = [[CXSwipeGestureRecognizer alloc] initWithTarget:self action:@selector(onSwipe:)];
     self.swipeGestureRecognizer.delegate = self;

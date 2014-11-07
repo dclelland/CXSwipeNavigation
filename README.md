@@ -51,8 +51,9 @@ CXSwipeNavigation is a series of classes that allows you to swipe vertically bet
         return self.viewControllers[index];
     }
 
+Additionally, you can fine-tune the transition using the `translationThreshold` and `velocityThreshold` properties in order to avoid accidental transitions.
+
 ### Todo:
 
-- Reimplement CXSwipeNavigationController in a way that makes better use of CXSwipeGestureRecognizer's new features
 - Scrolling not re-enabling after transition cancelled
 - Add example project

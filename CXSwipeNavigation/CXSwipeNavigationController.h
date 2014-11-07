@@ -29,6 +29,9 @@
 
 @property (nonatomic, weak) id <CXSwipeNavigationControllerDataSource> dataSource;
 
+@property (nonatomic) CGFloat translationThreshold;
+@property (nonatomic) CGFloat velocityThreshold;
+
 - (BOOL)canPush;
 - (BOOL)canPop;
 

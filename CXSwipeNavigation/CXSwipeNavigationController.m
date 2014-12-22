@@ -18,15 +18,16 @@
 
 @interface CXSwipeNavigationController () <UINavigationControllerDelegate, CXSwipeGestureRecognizerDelegate>
 
-@property (nonatomic) CGFloat transitioningOffset;
+@property (nonatomic) CGFloat translationOffset;
+
+- (CXSwipeGestureDirection)directionForOperation:(UINavigationControllerOperation)operation;
+- (UINavigationControllerOperation)operationForDirection:(CXSwipeGestureDirection)direction;
 
 @end
 
-@interface UIPanGestureRecognizer (Private)
+@interface CXSwipeGestureRecognizer (Private)
 
-- (CGFloat)translationForOperation:(UINavigationControllerOperation)operation;
-- (CGFloat)velocityForOperation:(UINavigationControllerOperation)operation;
-- (CGFloat)progressForOperation:(UINavigationControllerOperation)operation withInitialOffset:(CGFloat)offset;
+- (CGFloat)progressInDirection:(CXSwipeGestureDirection)direction withInitialOffset:(CGFloat)offset;
 
 @end
 
@@ -73,32 +74,36 @@
     /* If the interactive transition is not running */
     if (!self.swipeInteractiveTransition.transitioning) {
         
-        /* Get the relevant data */
-        UIScrollView *view = (UIScrollView *)gestureRecognizer.view;
-        
-        /* If scrolling downwards on a scrollview that is scrolled to the bottom, and can push, push a view controller */
-        if (gestureRecognizer.currentDirection == CXSwipeGestureDirectionUpwards && view.isScrolledToBottom && self.canPush) {
-            [self pushViewController:[self.dataSource swipeNavigationController:self viewControllerAtIndex:self.viewControllers.count] animated:YES];
-            self.transitioningOffset = [gestureRecognizer translationInDirection:CXSwipeGestureDirectionUpwards];
+        switch ([self operationForDirection:gestureRecognizer.currentDirection]) {
+            case UINavigationControllerOperationPush: {
+                if (self.canPush && [(UIScrollView *)gestureRecognizer.view isScrolledToBottom]) {
+                    [self pushViewController:[self.dataSource swipeNavigationController:self viewControllerAtIndex:self.viewControllers.count] animated:YES];
+                    self.translationOffset = [gestureRecognizer translationInDirection:gestureRecognizer.currentDirection];
+                }
+                break;
+            }
+            case UINavigationControllerOperationPop: {
+                if (self.canPop && [(UIScrollView *)gestureRecognizer.view isScrolledToTop]) {
+                    [self popViewControllerAnimated:YES];
+                    self.translationOffset = [gestureRecognizer translationInDirection:gestureRecognizer.currentDirection];
+                }
+                break;
+            }
+            default:
+                break;
         }
         
-        /* If scrolling upwards on a scrollview that is scrolled to the top, and can pop, pop a view controller */
-        if (gestureRecognizer.currentDirection == CXSwipeGestureDirectionDownwards > 0.0f && view.isScrolledToTop && self.canPop) {
-            [self popViewControllerAnimated:YES];
-            self.transitioningOffset = [gestureRecognizer translationInDirection:CXSwipeGestureDirectionDownwards];
-        }
-    
     }
     
     /* If the interactive transition is running */
     if (self.swipeInteractiveTransition.transitioning) {
         
         switch (gestureRecognizer.state) {
-
-            /* If the gesture has started, update the transition, or cancel it if the progress is less than zero */
+                
+                /* If the gesture has started, update the transition, or cancel it if the progress is less than zero */
             case UIGestureRecognizerStateBegan:
             case UIGestureRecognizerStateChanged: {
-                CGFloat progress = [gestureRecognizer progressForOperation:self.swipeTransition.operation withInitialOffset:self.transitioningOffset];
+                CGFloat progress = [gestureRecognizer progressInDirection:[self directionForOperation:self.swipeTransition.operation] withInitialOffset:self.translationOffset];
                 if (progress < 0.0f) {
                     [self.swipeInteractiveTransition cancelInteractiveTransition];
                 } else {
@@ -107,11 +112,12 @@
                 break;
             }
                 
-            /* If the gesture has finished, finish the transition, or cancel it if the velocity is less than zero */
+                /* If the gesture has finished, finish the transition, or cancel it if the velocity is less than zero */
             case UIGestureRecognizerStateEnded:
             case UIGestureRecognizerStateCancelled: {
-                CGFloat velocity = [gestureRecognizer velocityForOperation:self.swipeTransition.operation];
-                if (gestureRecognizer.state == UIGestureRecognizerStateCancelled || velocity < 0.0f) {
+                CGFloat translation = [gestureRecognizer translationInDirection:[self directionForOperation:self.swipeTransition.operation]];
+                CGFloat velocity = [gestureRecognizer velocityInDirection:[self directionForOperation:self.swipeTransition.operation]];
+                if (gestureRecognizer.state == UIGestureRecognizerStateCancelled || translation < self.translationThreshold || velocity < self.velocityThreshold) {
                     [self.swipeInteractiveTransition cancelInteractiveTransition];
                 } else {
                     [self.swipeInteractiveTransition finishInteractiveTransition];
@@ -150,31 +156,39 @@
     return gestureRecognizer == self.swipeGestureRecognizer && otherGestureRecognizer == self.topViewController.scrollView.panGestureRecognizer;
 }
 
+#pragma mark - Private
+
+- (UINavigationControllerOperation)operationForDirection:(CXSwipeGestureDirection)direction
+{
+    switch (direction) {
+        case CXSwipeGestureDirectionUpwards:
+            return UINavigationControllerOperationPush;
+        case CXSwipeGestureDirectionDownwards:
+            return UINavigationControllerOperationPop;
+        default:
+            return UINavigationControllerOperationNone;
+    }
+}
+
+- (CXSwipeGestureDirection)directionForOperation:(UINavigationControllerOperation)operation
+{
+    switch (operation) {
+        case UINavigationControllerOperationPush:
+            return CXSwipeGestureDirectionUpwards;
+        case UINavigationControllerOperationPop:
+            return CXSwipeGestureDirectionDownwards;
+        default:
+            return CXSwipeGestureDirectionNone;
+    }
+}
+
 @end
 
-@implementation UIPanGestureRecognizer (Private)
+@implementation CXSwipeGestureRecognizer (Private)
 
-- (CGFloat)translationForOperation:(UINavigationControllerOperation)operation
+- (CGFloat)progressInDirection:(CXSwipeGestureDirection)direction withInitialOffset:(CGFloat)offset
 {
-    switch (operation) {
-        case UINavigationControllerOperationPush: return -[self translationInView:self.view.superview].y;
-        case UINavigationControllerOperationPop: return [self translationInView:self.view.superview].y;
-        default: return 0.0f;
-    }
-}
-
-- (CGFloat)velocityForOperation:(UINavigationControllerOperation)operation
-{
-    switch (operation) {
-        case UINavigationControllerOperationPush: return -[self velocityInView:self.view.superview].y;
-        case UINavigationControllerOperationPop: return [self velocityInView:self.view.superview].y;
-        default: return 0.0f;
-    }
-}
-
-- (CGFloat)progressForOperation:(UINavigationControllerOperation)operation withInitialOffset:(CGFloat)offset
-{
-    return ([self translationForOperation:operation] - offset) / self.view.superview.frame.size.height;
+    return ([self translationInDirection:direction] - offset) / CGRectGetHeight(self.view.superview.frame);
 }
 
 @end

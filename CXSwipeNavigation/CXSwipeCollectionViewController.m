@@ -6,7 +6,7 @@
 //  Copyright (c) 2014 Daniel Clelland. All rights reserved.
 //
 
-#import <UIScrollView-Actions/UIScrollView+Actions.h>
+#import <UIScrollView_Actions/UIScrollView+Actions.h>
 
 #import "CXSwipeCollectionViewController.h"
 #import "CXSwipeNavigationController.h"

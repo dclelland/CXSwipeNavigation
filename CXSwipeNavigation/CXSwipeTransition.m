@@ -6,7 +6,7 @@
 //  Copyright (c) 2014 Daniel Clelland. All rights reserved.
 //
 
-#import <UIScrollView-Actions/UIScrollView+Actions.h>
+#import <UIScrollView_Actions/UIScrollView+Actions.h>
 
 #import "CXSwipeTransition.h"
 
@@ -46,7 +46,7 @@
     /* Calculate the various transformations */
     CGRect sourceRect = [transitionContext initialFrameForViewController:fromViewController];
     
-    CGAffineTransform animationTransform;
+    CGAffineTransform animationTransform = CGAffineTransformIdentity;
     
     CGAffineTransform upTransform = CGAffineTransformMakeTranslation(0.0f, -sourceRect.size.height - self.gutter);
     CGAffineTransform downTransform = CGAffineTransformMakeTranslation(0.0f, sourceRect.size.height + self.gutter);

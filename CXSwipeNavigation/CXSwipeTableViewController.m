@@ -6,9 +6,9 @@
 //  Copyright (c) 2014 Daniel Clelland. All rights reserved.
 //
 
-#import <UIScrollView_Actions/UIScrollView+Actions.h>
-
 #import "CXSwipeTableViewController.h"
+
+#import "UIScrollView+Actions.h"
 
 @implementation CXSwipeTableViewController
 

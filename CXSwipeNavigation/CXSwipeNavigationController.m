@@ -6,8 +6,6 @@
 //  Copyright (c) 2014 Daniel Clelland. All rights reserved.
 //
 
-#import <UIScrollView_Actions/UIScrollView+Actions.h>
-
 #import "CXSwipeNavigationController.h"
 
 #import "CXSwipeTableViewController.h"
@@ -15,6 +13,8 @@
 
 #import "CXSwipeTransition.h"
 #import "CXSwipeInteractiveTransition.h"
+
+#import "UIScrollView+Actions.h"
 
 @interface CXSwipeNavigationController () <UINavigationControllerDelegate, CXSwipeGestureRecognizerDelegate>
 

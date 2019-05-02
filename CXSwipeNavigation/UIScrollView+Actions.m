@@ -12,22 +12,22 @@
 
 - (CGPoint)topContentOffset
 {
-    return CGPointMake(0.0f, -self.contentInset.top);
+    return CGPointMake(0.0f, -self.adjustedContentInset.top);
 }
 
 - (CGPoint)bottomContentOffset
 {
-    return CGPointMake(0.0f, self.contentSize.height + self.contentInset.bottom - self.bounds.size.height);
+    return CGPointMake(0.0f, self.contentSize.height + self.adjustedContentInset.bottom - self.bounds.size.height);
 }
 
 - (CGPoint)leftContentOffset
 {
-    return CGPointMake(-self.contentInset.left, 0.0f);
+    return CGPointMake(-self.adjustedContentInset.left, 0.0f);
 }
 
 - (CGPoint)rightContentOffset
 {
-    return CGPointMake(self.contentSize.width + self.contentInset.right - self.bounds.size.width, 0.0f);
+    return CGPointMake(self.contentSize.width + self.adjustedContentInset.right - self.bounds.size.width, 0.0f);
 }
 
 - (BOOL)isScrolledToTop
